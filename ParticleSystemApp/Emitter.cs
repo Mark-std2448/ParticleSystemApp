@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ParticleSystemApp
 {
     public class Emitter
     {
         public List<Particle> particles = new List<Particle>();
+        public List<IImpactor> impactors = new List<IImpactor>(); 
         public int X;
         public int Y;
         public int Direction = 0;
@@ -37,6 +35,12 @@ namespace ParticleSystemApp
                 }
                 else
                 {
+                    
+                    foreach (var impactor in impactors)
+                    {
+                        impactor.Impact(particle);
+                    }
+
                     particle.X += particle.SpeedX;
                     particle.Y += particle.SpeedY;
                 }
@@ -54,9 +58,12 @@ namespace ParticleSystemApp
 
         public virtual Particle CreateParticle()
         {
-            var particle = new Particle();
-            particle.Life = Particle.rand.Next(LifeMin, LifeMax);
+            
+            var particle = new ParticleColorful();
+            particle.FromColor = Color.White;
+            particle.ToColor = Color.FromArgb(0, Color.White);
 
+            particle.Life = Particle.rand.Next(LifeMin, LifeMax);
             particle.Radius = Particle.rand.Next(RadiusMin, RadiusMax);
 
             var speed = Particle.rand.Next(SpeedMin, SpeedMax);
@@ -70,9 +77,15 @@ namespace ParticleSystemApp
 
         public void Render(Graphics g)
         {
+            
             foreach (var particle in particles)
             {
                 particle.Draw(g);
+            }
+
+            foreach (var impactor in impactors)
+            {
+                impactor.Render(g);
             }
         }
     }

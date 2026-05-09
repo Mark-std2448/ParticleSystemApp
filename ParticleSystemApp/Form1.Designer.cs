@@ -41,30 +41,33 @@
             this.picDisplay.Dock = System.Windows.Forms.DockStyle.Fill;
             this.picDisplay.Location = new System.Drawing.Point(0, 0);
             this.picDisplay.Name = "picDisplay";
-            this.picDisplay.Size = new System.Drawing.Size(800, 450);
+            this.picDisplay.Size = new System.Drawing.Size(2018, 1024);
             this.picDisplay.TabIndex = 0;
             this.picDisplay.TabStop = false;
+            this.picDisplay.MouseClick += new System.Windows.Forms.MouseEventHandler(this.picDisplay_MouseClick);
             
             
             
             this.timer1.Enabled = true;
             this.timer1.Interval = 40;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             
             
             
-            this.tbRadius.Location = new System.Drawing.Point(339, 111);
+            this.tbRadius.Location = new System.Drawing.Point(623, 931);
             this.tbRadius.Maximum = 200;
             this.tbRadius.Minimum = 10;
             this.tbRadius.Name = "tbRadius";
-            this.tbRadius.Size = new System.Drawing.Size(104, 69);
+            this.tbRadius.Size = new System.Drawing.Size(801, 69);
             this.tbRadius.TabIndex = 1;
             this.tbRadius.Value = 10;
+            this.tbRadius.Scroll += new System.EventHandler(this.tbRadius_Scroll);
             
             
             
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(2018, 1024);
             this.Controls.Add(this.tbRadius);
             this.Controls.Add(this.picDisplay);
             this.Name = "Form1";
