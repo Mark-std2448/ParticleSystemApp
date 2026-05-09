@@ -14,11 +14,25 @@ namespace ParticleSystemApp
 
             picDisplay.Image = new Bitmap(picDisplay.Width, picDisplay.Height);
 
+            
             emitter.X = picDisplay.Width / 2;
-            emitter.Y = picDisplay.Height / 2;
+            emitter.Y = 20;
+            emitter.Direction = 270; 
+            emitter.Spreading = 70;  
 
             
-            emitter.impactors.Add(new ColorPoint { X = 200, Y = 200, Color = Color.Yellow });
+            Color[] colors = { Color.Red, Color.Orange, Color.Yellow, Color.Green, Color.Cyan, Color.Blue, Color.Purple };
+
+            for (int i = 0; i < colors.Length; i++)
+            {
+                emitter.impactors.Add(new ColorPoint
+                {
+                    X = 60 + i * (picDisplay.Width / colors.Length),
+                    Y = 200 + (float)Math.Sin(i) * 40, 
+                    Color = colors[i],
+                    Radius = 40
+                });
+            }
 
             picDisplay.MouseClick += picDisplay_MouseClick;
         }
@@ -42,6 +56,26 @@ namespace ParticleSystemApp
             if (e.Button == MouseButtons.Left)
             {
                 emitter.impactors.Add(new CounterPoint { X = e.X, Y = e.Y });
+            }
+            
+            else if (e.Button == MouseButtons.Right)
+            {
+                
+                for (int i = emitter.impactors.Count - 1; i >= 0; i--)
+                {
+                    var imp = emitter.impactors[i];
+                    if (imp is CounterPoint cp)
+                    {
+                        
+                        float dX = e.X - cp.X;
+                        float dY = e.Y - cp.Y;
+                        if (Math.Sqrt(dX * dX + dY * dY) < cp.Radius)
+                        {
+                            emitter.impactors.RemoveAt(i);
+                            break; 
+                        }
+                    }
+                }
             }
         }
 

@@ -50,21 +50,21 @@ namespace ParticleSystemApp
             {
                 particlesToCreate -= 1;
                 var particle = CreateParticle();
-                particle.X = X;
-                particle.Y = Y;
                 particles.Add(particle);
             }
         }
 
         public virtual Particle CreateParticle()
         {
-            
             var particle = new ParticleColorful();
             particle.FromColor = Color.White;
             particle.ToColor = Color.FromArgb(0, Color.White);
 
             particle.Life = Particle.rand.Next(LifeMin, LifeMax);
             particle.Radius = Particle.rand.Next(RadiusMin, RadiusMax);
+
+            particle.X = Particle.rand.Next(0, 1000);
+            particle.Y = Y; 
 
             var speed = Particle.rand.Next(SpeedMin, SpeedMax);
             var direction = Direction + (double)Particle.rand.Next(Spreading) - Spreading / 2;
