@@ -54,7 +54,7 @@
             
             
             
-            this.tbRadius.Location = new System.Drawing.Point(623, 931);
+            this.tbRadius.Location = new System.Drawing.Point(530, 931);
             this.tbRadius.Maximum = 200;
             this.tbRadius.Minimum = 10;
             this.tbRadius.Name = "tbRadius";

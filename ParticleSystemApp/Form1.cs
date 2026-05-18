@@ -8,6 +8,9 @@ namespace ParticleSystemApp
     {
         Emitter emitter = new Emitter();
 
+        
+        TeleportPoint teleport = new TeleportPoint { X = 300, Y = 350, TargetX = 500, TargetY = 500 };
+
         public Form1()
         {
             InitializeComponent();
@@ -17,22 +20,24 @@ namespace ParticleSystemApp
             
             emitter.X = picDisplay.Width / 2;
             emitter.Y = 20;
-            emitter.Direction = 270; 
-            emitter.Spreading = 70;  
+            emitter.Direction = 270;
+            emitter.Spreading = 70;
 
             
             Color[] colors = { Color.Red, Color.Orange, Color.Yellow, Color.Green, Color.Cyan, Color.Blue, Color.Purple };
-
             for (int i = 0; i < colors.Length; i++)
             {
                 emitter.impactors.Add(new ColorPoint
                 {
                     X = 60 + i * (picDisplay.Width / colors.Length),
-                    Y = 200 + (float)Math.Sin(i) * 40, 
+                    Y = 150 + (float)Math.Sin(i) * 40,
                     Color = colors[i],
                     Radius = 40
                 });
             }
+
+            
+            emitter.impactors.Add(teleport);
 
             picDisplay.MouseClick += picDisplay_MouseClick;
         }
@@ -53,26 +58,40 @@ namespace ParticleSystemApp
         private void picDisplay_MouseClick(object sender, MouseEventArgs e)
         {
             
-            if (e.Button == MouseButtons.Left)
+            if (ModifierKeys == Keys.Control)
             {
-                emitter.impactors.Add(new CounterPoint { X = e.X, Y = e.Y });
+                if (e.Button == MouseButtons.Left)
+                {
+                    teleport.X = e.X;
+                    teleport.Y = e.Y; 
+                }
+                else if (e.Button == MouseButtons.Right)
+                {
+                    teleport.TargetX = e.X;
+                    teleport.TargetY = e.Y; 
+                }
             }
             
-            else if (e.Button == MouseButtons.Right)
+            else
             {
-                
-                for (int i = emitter.impactors.Count - 1; i >= 0; i--)
+                if (e.Button == MouseButtons.Left)
                 {
-                    var imp = emitter.impactors[i];
-                    if (imp is CounterPoint cp)
+                    emitter.impactors.Add(new CounterPoint { X = e.X, Y = e.Y });
+                }
+                else if (e.Button == MouseButtons.Right)
+                {
+                    for (int i = emitter.impactors.Count - 1; i >= 0; i--)
                     {
-                        
-                        float dX = e.X - cp.X;
-                        float dY = e.Y - cp.Y;
-                        if (Math.Sqrt(dX * dX + dY * dY) < cp.Radius)
+                        var imp = emitter.impactors[i];
+                        if (imp is CounterPoint cp)
                         {
-                            emitter.impactors.RemoveAt(i);
-                            break; 
+                            float dX = e.X - cp.X;
+                            float dY = e.Y - cp.Y;
+                            if (Math.Sqrt(dX * dX + dY * dY) < cp.Radius)
+                            {
+                                emitter.impactors.RemoveAt(i);
+                                break;
+                            }
                         }
                     }
                 }
@@ -85,6 +104,7 @@ namespace ParticleSystemApp
             {
                 if (imp is ColorPoint cp) cp.Radius = tbRadius.Value;
                 if (imp is CounterPoint cnt) cnt.Radius = tbRadius.Value;
+                if (imp is TeleportPoint tp) tp.Radius = tbRadius.Value;
             }
         }
     }

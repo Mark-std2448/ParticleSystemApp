@@ -35,7 +35,6 @@ namespace ParticleSystemApp
                 }
                 else
                 {
-                    
                     foreach (var impactor in impactors)
                     {
                         impactor.Impact(particle);
@@ -77,7 +76,6 @@ namespace ParticleSystemApp
 
         public void Render(Graphics g)
         {
-            
             foreach (var particle in particles)
             {
                 particle.Draw(g);
