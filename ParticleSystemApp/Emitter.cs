@@ -18,10 +18,11 @@ namespace ParticleSystemApp
         public int RadiusMax = 10;
         public int LifeMin = 20;
         public int LifeMax = 100;
+        public int ParticlesPerTick = 10;
 
         public void UpdateState()
         {
-            int particlesToCreate = 10;
+            int particlesToCreate = ParticlesPerTick;
 
             for (int i = 0; i < particles.Count; i++)
             {

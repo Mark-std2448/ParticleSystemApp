@@ -8,7 +8,6 @@ namespace ParticleSystemApp
     {
         Emitter emitter = new Emitter();
 
-        
         TeleportPoint teleport = new TeleportPoint { X = 300, Y = 350, TargetX = 500, TargetY = 500 };
 
         public Form1()
@@ -17,13 +16,11 @@ namespace ParticleSystemApp
 
             picDisplay.Image = new Bitmap(picDisplay.Width, picDisplay.Height);
 
-            
             emitter.X = picDisplay.Width / 2;
             emitter.Y = 20;
             emitter.Direction = 270;
             emitter.Spreading = 70;
 
-            
             Color[] colors = { Color.Red, Color.Orange, Color.Yellow, Color.Green, Color.Cyan, Color.Blue, Color.Purple };
             for (int i = 0; i < colors.Length; i++)
             {
@@ -36,7 +33,6 @@ namespace ParticleSystemApp
                 });
             }
 
-            
             emitter.impactors.Add(teleport);
 
             picDisplay.MouseClick += picDisplay_MouseClick;
@@ -57,26 +53,25 @@ namespace ParticleSystemApp
 
         private void picDisplay_MouseClick(object sender, MouseEventArgs e)
         {
-            
             if (ModifierKeys == Keys.Control)
             {
                 if (e.Button == MouseButtons.Left)
                 {
                     teleport.X = e.X;
-                    teleport.Y = e.Y; 
+                    teleport.Y = e.Y;
                 }
                 else if (e.Button == MouseButtons.Right)
                 {
                     teleport.TargetX = e.X;
-                    teleport.TargetY = e.Y; 
+                    teleport.TargetY = e.Y;
                 }
             }
-            
             else
             {
                 if (e.Button == MouseButtons.Left)
                 {
-                    emitter.impactors.Add(new CounterPoint { X = e.X, Y = e.Y });
+                    int startRadius = tbCounterRadius != null ? tbCounterRadius.Value : 50;
+                    emitter.impactors.Add(new CounterPoint { X = e.X, Y = e.Y, Radius = startRadius });
                 }
                 else if (e.Button == MouseButtons.Right)
                 {
@@ -98,13 +93,38 @@ namespace ParticleSystemApp
             }
         }
 
+        private void tbParticlesCount_Scroll(object sender, EventArgs e)
+        {
+            emitter.ParticlesPerTick = tbParticlesCount.Value;
+            if (lblParticlesCount != null) lblParticlesCount.Text = $"Частиц за тик: {tbParticlesCount.Value}";
+        }
+
+        private void tbTeleportDirection_Scroll(object sender, EventArgs e)
+        {
+            teleport.SpawnDirection = tbTeleportDirection.Value;
+            if (lblTeleportDirection != null) lblTeleportDirection.Text = $"Вылет из ТП: {tbTeleportDirection.Value}°";
+        }
+
         private void tbRadius_Scroll(object sender, EventArgs e)
         {
-            foreach (var imp in emitter.impactors)
+            if (tbTeleportRadius != null && lblTeleportRadius != null)
             {
-                if (imp is ColorPoint cp) cp.Radius = tbRadius.Value;
-                if (imp is CounterPoint cnt) cnt.Radius = tbRadius.Value;
-                if (imp is TeleportPoint tp) tp.Radius = tbRadius.Value;
+                teleport.Radius = tbTeleportRadius.Value;
+                lblTeleportRadius.Text = $"Радиус телепорта: {tbTeleportRadius.Value}";
+            }
+
+            if (tbCounterRadius != null && lblCounterRadius != null)
+            {
+                lblCounterRadius.Text = $"Радиус счетчика: {tbCounterRadius.Value}";
+            }
+
+            if (tbColorRadius != null && lblColorRadius != null)
+            {
+                lblColorRadius.Text = $"Радиус окрашивания: {tbColorRadius.Value}";
+                foreach (var imp in emitter.impactors)
+                {
+                    if (imp is ColorPoint cp) cp.Radius = tbColorRadius.Value;
+                }
             }
         }
     }
